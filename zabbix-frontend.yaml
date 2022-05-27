@@ -5,7 +5,7 @@ metadata:
   creationTimestamp: null
   labels:
     zabbix-app: zabbix-server
-  name: zabbix-web-nginx-pgsql:latest
+  name: zabbix-web-nginx-pgsql
 spec:
   selector:
     matchLabels:
