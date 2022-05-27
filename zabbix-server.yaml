@@ -1,0 +1,71 @@
+## Deployment
+apiVersion:  apps/v1
+kind: StatefulSet
+
+metadata:
+  namespace: monitoring
+  annotations:
+  labels:
+    zabbix-app: zabbix-server
+  name: zabbix-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      zabbix-app: zabbix-server  
+  serviceName: "zabbix-server"
+  #strategy:
+  #  type: Recreate
+  template:
+    metadata:
+      labels:
+        zabbix-app: zabbix-server
+    spec:
+      containers:
+      - image: zabbix-server-pgsql:latest
+        name: zabbix-server
+        env:
+          - name: PGSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: zabbix-app
+                key: PGSQL_ROOT_PASSWORD
+          - name: PGSQL_DATABASE
+            valueFrom:
+              configMapKeyRef:
+                key: PG/SQL_DATABASE
+                name: zabbix-app
+
+          - name: PGSQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: zabbix-app
+                key:  PGSQL_USER
+
+          - name: PGSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: zabbix-app
+                key:  PGSQL_PASSWORD
+        ports:
+        - containerPort: 10051
+      restartPolicy: Always
+      
+#### Service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: monitoring
+  labels:
+    zabbix-app: zabbix-server
+  name: zabbix-server
+spec:
+  ports:
+  - name: "10051"
+    port: 10051
+    targetPort: 10051
+  selector:
+    zabbix-app: zabbix-server
+status:
+  loadBalancer: {}

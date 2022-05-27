@@ -1,0 +1,118 @@
+apiVersion: apps/v1
+kind: StatefulSet
+
+metadata:
+  namespace: monitoring
+  name: pgsql-server
+  labels:
+    app: pgsql-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pgsql-server
+  serviceName: pgsql-server
+  template:
+    metadata:
+      labels:
+        app: pgsql-server
+    spec:
+      containers:
+        - image: postgres:alpine3.16
+          name: pgsql-server
+          args:
+            - "--default-authentication-plugin=pgsql_native_password"
+            - --character-set-server=utf8
+            - --collation-server=utf8_bin
+          env:
+            - name: PGSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: zabbix-app
+                  key: PGSQL_ROOT_PASSWORD
+            - name: PGSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  key: PGSQL_DATABASE
+                  name: zabbix-app
+                  
+            - name: PGSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: zabbix-app
+                  key:  PGSQL_USER
+
+            - name: PGSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: zabbix-app
+                  key:  PGSQL_PASSWORD
+           
+          ports:
+            - containerPort: 3306
+              name: pgsql-server
+          volumeMounts:
+            - name: pgsql-persistent-storage
+              mountPath: /var/lib/pgsql
+      volumes:
+        - name: pgsql-persistent-storage
+          persistentVolumeClaim:
+            claimName: pgsql-pv-claim
+
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: manual
+  namespace: monitoring
+provisioner: docker.io/hostpath
+reclaimPolicy: Retain
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  namespace: monitoring
+  name: pgsql-pv-volume
+  labels:
+    type: local
+    app: pgsql-server
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /data/pgsql
+    
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  namespace: monitoring
+  name: pgsql-pv-claim
+  labels:
+    app: pgsql-server
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: monitoring
+  name: pgsql-server
+  labels:
+    app: pgsql-server
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3306
+  selector:
+    app: pgsql-server

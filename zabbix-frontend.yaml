@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: monitoring
+  creationTimestamp: null
+  labels:
+    zabbix-app: zabbix-server
+  name: zabbix-web-nginx-pgsql:latest
+spec:
+  selector:
+    matchLabels:
+      zabbix-app: zabbix-server
+  serviceName: "zabbix-web-nginx-pgsql"
+  replicas: 1
+  #strategy:
+  #  type: Recreate
+  template:
+    metadata:
+      labels:
+        zabbix-app: zabbix-server
+    spec:
+      containers:
+      - env:
+        - name: PGSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              key: PGSQL_DATABASE
+              name: zabbix-app
+              
+        - name: PGSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: PGSQL_ROOT_PASSWORD
+              name: zabbix-app
+
+        - name: PGSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: PGSQL_PASSWORD
+              name: zabbix-app
+
+        - name: PGSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: PGSQL_ROOT_PASSWORD
+              name: zabbix-app
+        - name: ZBX_SERVER_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: ZBX_SERVER_HOST
+              name: zabbix-app
+        - name: ZBX_SERVER_NAME
+          valueFrom:
+            configMapKeyRef:
+              key: ZBX_SERVER_NAME
+              name: zabbix-app
+        image: zabbix-web-nginx-pgsql:latest
+        livenessProbe:
+          exec:
+            command:
+            - curl
+            - -f
+            - http://localhost
+          failureThreshold: 3
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        name: zabbix-web-nginx-pgsql
+        ports:
+        - containerPort: 80
+        resources: {}
+### Service
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: monitoring
+  annotations:
+  creationTimestamp: null
+  labels:
+    zabbix-app: zabbix-server
+  name: zabbix-web-nginx-pgsql
+spec:
+  ports:
+  - name: "8081"
+    port: 8081
+    targetPort: 80
+  - name: "8443"
+    port: 8443
+    targetPort: 443
+  selector:
+    zabbix-app: zabbix-server
+status:
+  loadBalancer: {}
