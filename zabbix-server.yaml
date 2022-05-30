@@ -22,7 +22,7 @@ spec:
         zabbix-app: zabbix-server
     spec:
       containers:
-      - image: zabbix-server-pgsql:latest
+      - image: zabbix/zabbix-server-pgsql:latest
         name: zabbix-server
         env:
           - name: PGSQL_ROOT_PASSWORD
