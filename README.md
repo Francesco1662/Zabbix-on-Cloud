@@ -41,7 +41,7 @@ kubectl apply -f secretes.yaml
 
 4 - Execute the apply to create database
 ```
-kubectl apply -f database-mysql.yaml 
+kubectl apply -f database-pgsql.yaml 
 ```
 
 5 - Execute the apply to create zabbix-agent
