@@ -54,7 +54,7 @@ spec:
             configMapKeyRef:
               key: ZBX_SERVER_NAME
               name: zabbix-app
-        image: zabbix-web-nginx-pgsql:latest
+        image: zabbix/zabbix-web-nginx-pgsql:latest
         livenessProbe:
           exec:
             command:
