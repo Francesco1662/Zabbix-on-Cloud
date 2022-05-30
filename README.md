@@ -67,7 +67,6 @@ kubectl get deployment,svc,pods,pvc,ingress  -n monitoring
 
 ```
 
-![Alt text](screenshot/kubernetes-zabbix.png?raw=true "Kubernetes-Zabbix")
 
 ## CADVISOR
 
@@ -123,5 +122,3 @@ https://hub.docker.com/u/zabbix/
 
 https://kubernetes.io/docs/concepts/
 
-
-Thanks, @QuintilianoB for collaborating with the best practices Kubernetes  :)
