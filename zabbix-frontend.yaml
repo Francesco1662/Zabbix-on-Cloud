@@ -1,5 +1,6 @@
 apiVersion: apps/v1
 kind: StatefulSet
+
 metadata:
   namespace: monitoring
   creationTimestamp: null
@@ -67,28 +68,22 @@ spec:
           timeoutSeconds: 5
         name: zabbix-web-nginx-pgsql
         ports:
-        - containerPort: 80
-        resources: {}
+        - containerPort: 10051
+      restartPolicy: Always
 ### Service
-
 ---
 apiVersion: v1
 kind: Service
 metadata:
   namespace: monitoring
-  annotations:
-  creationTimestamp: null
   labels:
     zabbix-app: zabbix-server
-  name: zabbix-web-nginx-pgsql
+  name: zabbix-server
 spec:
   ports:
-  - name: "8081"
-    port: 8081
-    targetPort: 80
-  - name: "8443"
-    port: 8443
-    targetPort: 443
+  - name: "10051"
+    port: 10051
+    targetPort: 10051
   selector:
     zabbix-app: zabbix-server
 status:
