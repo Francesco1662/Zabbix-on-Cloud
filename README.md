@@ -71,22 +71,6 @@ After that execute this command to get IP address of the Zabbix Frontend:
 ```
 $ kubectl get svc  -n monitoring
 ...
-zabbix-web-nginx-mysql   ClusterIP   10.103.89.223   <none>        8081/TCP,8443/TCP   18h
+zabbix-web-nginx-pgsql   ClusterIP   10.103.89.223   <none>        8081/TCP,8443/TCP   18h
 
 ```
-
-## Metrics
-
-I created one host at the Zabbix to get metrics Cadvisor
-
-![Alt text](screenshot/metrics-cadvisor-zabbix.png?raw=true "Cadvisor-Zabbix")
-
-
-## Reference
-
-https://www.zabbix.com/documentation/current/manual/config/items/itemtypes/prometheus
-
-https://hub.docker.com/u/zabbix/
-
-https://kubernetes.io/docs/concepts/
-
