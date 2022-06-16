@@ -6,19 +6,6 @@
 
 - Kubernetes (Used version: v1.18.0)
 
-# File structure
-
-| File			| Content | Resources |
-| ------------- | ------- | --------- |
-| [cadvisor.yaml](./cadvisor.yaml) | Configuration to get and export monitoring metrics of [cAdvisor](https://prometheus.io/docs/guides/cadvisor/) ||
-| [clusterRole-monitoring.yaml](./clusterRole-monitoring.yaml) | Prometheus roles ||
-| [confimaps.yaml](./confimaps.yaml) | Non confidential variables with data used in many files | [ConfigMaps](https://kubernetes.io/docs/concepts/configuration/configmap/)
-| [nampespace.yaml](./nampespace.yaml) | Namespace configuration |[Namespaces](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/)|
-| [zabbix-agent.yaml](zabbix-agent.yaml) | Configuration of Zabbix Agent | [Statefulsets](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/), [PVC and PV](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) |
-| [database-pgsql.yaml](./database-pgsql.yaml) |Database configuration | [Statefulsets](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/), [PVC and PV](https://kubernetes.io/docs/concepts/storage/persistent-volumes/), [Service](https://kubernetes.io/docs/concepts/services-networking/service/), [StorageClass](https://kubernetes.io/docs/concepts/storage/storage-classes/) |
-| [zabbix-server.yaml](./zabbix-server.yaml) | Zabbix server configuration | [Statefulsets](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/) and [Service](https://kubernetes.io/docs/concepts/services-networking/service/) |
-| [zabbix-frontend.yaml](./zabbix-frontend.yaml) | Frontend configuration | [Statefulsets](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/) and [Service](https://kubernetes.io/docs/concepts/services-networking/service/) |
-
 
 # Step by Step
 
@@ -44,11 +31,6 @@ kubectl apply -f secretes.yaml
 kubectl apply -f database-pgsql.yaml 
 ```
 
-5 - Execute the apply to create zabbix-agent
-```
-kubectl apply -f zabbix-agent.yaml
-```
-
 6- Execute the apply to create zabbix-server
 
 ```
@@ -65,21 +47,7 @@ Execute the command to get informations about your enviromennt:
 ```
 kubectl get deployment,svc,pods,pvc,ingress  -n monitoring
 
-```
 
-
-## CADVISOR
-
-The Cadvisor export the metrics of the Kubernetes if you preferer monitoring this environment with the Zabbix.
-
-```
-kubectl apply -f cadvisor.yaml
-```
-
-```
-kubectl get deployment,svc,pods,pvc,ingress  -n cadvisor`
-```
-![Alt text](screenshot/cadvisor.png?raw=true "Cadvisor")
 
 
 ## Access
