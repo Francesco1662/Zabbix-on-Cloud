@@ -55,7 +55,7 @@ spec:
             configMapKeyRef:
               key: ZBX_SERVER_NAME
               name: zabbix-app
-        image: zabbix/zabbix-web-nginx-pgsql:latest
+        image: zabbix/zabbix-web-apache-pgsql:6.0-alpine-latest
         livenessProbe:
           exec:
             command:
@@ -92,5 +92,5 @@ spec:
     targetPort: 443
   selector:
     zabbix-app: zabbix-server
-status:
-  loadBalancer: {}
+  status:
+    loadBalancer: {}
