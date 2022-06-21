@@ -30,7 +30,7 @@ spec:
               key: ZBX_HOSTNAME
               name: zabbix-app
 
-        image: zabbix/zabbix-agent:latest
+        image: zabbix/zabbix-agent:6.0-alpine-latest
         name: zabbix-agent
         ports:
         - containerPort: 10050
