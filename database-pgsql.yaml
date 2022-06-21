@@ -18,7 +18,7 @@ spec:
         app: pgsql-server
     spec:
       containers:
-        - image: postgres:14.3-alpine
+        - image: postgres:alpine3.16
           name: pgsql-server
           args:
             - "--default-authentication-plugin=pgsql_native_password"
