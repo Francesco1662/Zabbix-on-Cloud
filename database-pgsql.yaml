@@ -116,3 +116,21 @@ spec:
     - port: 3306
   selector:
     app: pgsql-server
+livenessProbe:
+  httpGet:
+    path: /health/local
+    scheme: HTTP
+    port: 8888
+  initialDelaySeconds: 120
+  periodSeconds: 5
+  timeoutSeconds: 5
+  failureThreshold: 10
+readinessProbe:
+  httpGet:
+    path: /admin/health
+    scheme: HTTP
+    port: 3306
+  initialDelaySeconds: 150
+  periodSeconds: 5
+  timeoutSeconds: 5
+  failureThreshold: 10
