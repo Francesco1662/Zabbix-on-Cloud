@@ -22,7 +22,7 @@ spec:
         zabbix-app: zabbix-server
     spec:
       containers:
-      - image: zabbix/zabbix-server-pgsql:6.0-alpine-latest
+      - image: zabbix/zabbix-server-pgsql:trunk-ubuntu
         name: zabbix-server
         env:
           - name: PGSQL_ROOT_PASSWORD
@@ -67,5 +67,4 @@ spec:
     targetPort: 10051
   selector:
     zabbix-app: zabbix-server
-status:
-  loadBalancer: {}
+type: LoadBalancer
